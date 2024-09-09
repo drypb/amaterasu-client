@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
     SC_HANDLE hService, hSCManager;
     DRIVER_SETTINGS DriverSettings;
     HANDLE timerHandle, DriverHandle;
-    FILE* logFile;
+    FILE *logFile,*RegLog, *FSLog, *LoadLog, *ProcLog;
     wchar_t DriverName[] = DRIVER_NAME;
     STARTUPINFO StartUpInfo = {sizeof StartUpInfo};
     PROCESS_INFORMATION ProcessInformation;
@@ -29,7 +29,12 @@ int main(int argc, char** argv) {
     CHAR um_msg[] = "Alo do modo de usuario\n";
 
 
-    fopen_s(&logFile, "Log.txt", "w");
+    fopen_s(&RegLog, "reg.json", "w");
+    fopen_s(&FSLog, "fs.json", "w");
+    fopen_s(&LoadLog, "load.json", "w");
+    fopen_s(&ProcLog, "proc.json", "w");
+
+    logFile = NULL;
 
     if (loadDriver)
         LoadDriver(&hService, &hSCManager, DriverName);
@@ -67,7 +72,10 @@ int main(int argc, char** argv) {
 
     ResumeThread(ProcessInformation.hThread);
 
-    fprintf(logFile, "[\n");
+    fprintf(RegLog, "[\n");
+    fprintf(FSLog, "[\n");
+    fprintf(LoadLog, "[\n");
+    fprintf(ProcLog, "[\n");
     // Main loop for capturing
     while (captureOn) {
         // Send IOCTL to driver to capture information
@@ -80,10 +88,28 @@ int main(int argc, char** argv) {
 
         // Log captured information if any
         if (BytesReturned > 0)
+            switch (Info.InfoType) {
+            case INFO_FS:
+                logFile = FSLog;
+                break;
+            case INFO_REG:
+                logFile = RegLog;
+                break;
+            case INFO_PROC:
+                logFile = ProcLog;
+                break;
+            case INFO_LOAD:
+                logFile = LoadLog;
+                break;
+            }
+
             LogInfo(Info, logFile);
 
     }
-    fprintf(logFile, "]\n");
+    fprintf(RegLog, "]\n");
+    fprintf(FSLog, "]\n");
+    fprintf(LoadLog, "]\n");
+    fprintf(ProcLog, "]\n");
 
 
     DeleteTimer(timerHandle);
