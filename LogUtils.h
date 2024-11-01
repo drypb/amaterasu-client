@@ -15,16 +15,17 @@ void LogFsInfo(FS_INFO FsInfo, FILE* logFile);
 
 void LogInfo(INFO Info, FILE* logFile);
 
-static void log(FILE* dest, char* tag, char* content);
-static void log(FILE* dest, char* tag, PWSTR content);
-static void log(FILE* dest, char* tag, int content);
-static void log(FILE* dest, char* tag, ULONG content);
-static void log(FILE* dest, char* tag, ULONGLONG content);
+void log(FILE* dest, const char* tag, const char* content);
+void log(FILE* dest, const char* tag, PWSTR content);
+void log(FILE* dest, WCHAR* tag, const char* content);
+void log(FILE* dest, const char* tag, int content);
+void log(FILE* dest, const char* tag, ULONG content);
+void log(FILE* dest, const char* tag, ULONGLONG content);
 
 
-static void tag(FILE* dest, char* tag);
+void tag(FILE* dest, const char* tag);
 
-static void endtag(FILE* dest, char* tag);
+void endtag(FILE* dest, const char* tag);
 
 
 
