@@ -10,19 +10,19 @@
  */
 static inline void LogTokenType(TOKEN_TYPE Type, FILE* logFile)
 {
-    fprintf(logFile, "\"token type\": ");
+    tag(logFile, "token_type");
     switch (Type) {
     case TokenPrimary:
-        fprintf(logFile, "\"primary token\"");
+        fprintf(logFile, "primary token");
         break;
     case TokenImpersonation:
-        fprintf(logFile, "\"impersonation token\"");
+        fprintf(logFile, "impersonation token");
         break;
     default:
-        fprintf(logFile, "\"undefined token type %d\"", Type);
+        fprintf(logFile, "undefined token type %d", Type);
         break;
     }
-    fprintf(logFile, ",\n");
+    endtag(logFile, "token_type");
 }
 
 /**
@@ -52,7 +52,7 @@ static inline void LogPrivilegeName(LUID_AND_ATTRIBUTES Privilege, FILE* logFile
 
     LookupPrivilegeName(NULL, &Privilege.Luid, Name, &NameSize);
 
-    fprintf(logFile, "\"%ws\": \"%s\"", Name, isEnabled(Privilege.Attributes) ? "Enabled" : "Disabled");
+    log(logFile, Name, isEnabled(Privilege.Attributes) ? "Enabled" : "Disabled");
 
     free(Name);
 }
@@ -66,18 +66,12 @@ static inline void LogPrivilegeName(LUID_AND_ATTRIBUTES Privilege, FILE* logFile
  */
 static inline void LogPrivileges(PRIVILEGES Privileges, FILE* logFile)
 {
-    fprintf(logFile, "\"privileges\": [\n");
+    tag(logFile, "privileges");
 
-    for (ULONG i = 0; i < Privileges.PrivilegeCount; i++) {
-        fprintf(logFile, "  { ");
+    for (ULONG i = 0; i < Privileges.PrivilegeCount; i++) 
         LogPrivilegeName(Privileges.Privileges[i], logFile);
-        fprintf(logFile, " }");
-        if (i < Privileges.PrivilegeCount - 1) {
-            fprintf(logFile, ",\n");
-        }
-    }
 
-    fprintf(logFile, "\n],\n");
+    endtag(logFile, "privileges");
 }
 
 /**
@@ -89,22 +83,22 @@ static inline void LogPrivileges(PRIVILEGES Privileges, FILE* logFile)
  */
 static inline void LogSecurityImpersonationLevel(SECURITY_IMPERSONATION_LEVEL ImpersonationLevel, FILE* logFile)
 {
-    fprintf(logFile, "\"impersonation level\": ");
+    tag(logFile, "impersonation_level");
     switch (ImpersonationLevel) {
     case SecurityAnonymous:
-        fprintf(logFile, "\"SecurityAnonymous\"");
+        fprintf(logFile, "SecurityAnonymous");
         break;
     case SecurityIdentification:
-        fprintf(logFile, "\"SecurityIdentification\"");
+        fprintf(logFile, "SecurityIdentification");
         break;
     case SecurityImpersonation:
-        fprintf(logFile, "\"SecurityImpersonation\"");
+        fprintf(logFile, "SecurityImpersonation");
         break;
     case SecurityDelegation:
-        fprintf(logFile, "\"SecurityDelegation\"");
+        fprintf(logFile, "SecurityDelegation");
         break;
     }
-    fprintf(logFile, ",\n");
+    endtag(logFile, "impersonation_level");
 }
 
 /**
@@ -119,7 +113,7 @@ void LogTokenInfo(TOKEN_INFO TokenInfo, FILE* logFile)
     LogTokenType(TokenInfo.Type, logFile);
     LogPrivileges(TokenInfo.Privileges, logFile);
 
-    fprintf(logFile, "\"elevation status\": \"%d\",\n", TokenInfo.TokenElevation.TokenIsElevated);
+    log(logFile, "elevation_status", TokenInfo.TokenElevation.TokenIsElevated);
 
     if (TokenInfo.Type == TokenImpersonation) {
         LogSecurityImpersonationLevel(TokenInfo.ImpersonationLevel, logFile);

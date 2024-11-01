@@ -25,7 +25,6 @@
  * 	- TRUE the driver was loaded
  * 	- FALSE failed to load the driver
  */
-
 BOOLEAN LoadDriver(_Out_ SC_HANDLE* hService, _Out_ SC_HANDLE* hSCManager, _In_ wchar_t* DriverName);
 
 /*

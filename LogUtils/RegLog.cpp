@@ -9,19 +9,19 @@
  */
 static inline void LogRegClass(REG_NOTIFY_CLASS RegNotifyClass, FILE* logFile)
 {
-    fprintf(logFile, "\"registry operation\": ");
+    tag(logFile, "registry_operation");
     switch (RegNotifyClass) {
     case RegNtSetValueKey:
-        fprintf(logFile, "\"RegNtSetValueKey\"");
+        fprintf(logFile, "RegNtSetValueKey");
         break;
     case RegNtDeleteValueKey:
-        fprintf(logFile, "\"RegNtDeleteValueKey\"");
+        fprintf(logFile, "RegNtDeleteValueKey");
         break;
     default:
-        fprintf(logFile, "\"not implemented\"");
+        fprintf(logFile, "not implemented");
         break;
     }
-    fprintf(logFile, ",\n");
+    endtag(logFile, "registry_operation");
 }
 
 /**
@@ -33,7 +33,7 @@ static inline void LogRegClass(REG_NOTIFY_CLASS RegNotifyClass, FILE* logFile)
  */
 static inline void LogRegName(PWSTR Name, FILE* logFile)
 {
-    fprintf(logFile, "\"name\": \"%ws\",\n", Name);
+    log(logFile, "name", Name);
 }
 
 /**
@@ -45,28 +45,28 @@ static inline void LogRegName(PWSTR Name, FILE* logFile)
  */
 static inline void LogRegDataType(ULONG Type, FILE* logFile)
 {
-    fprintf(logFile, "\"data type\": ");
+    tag(logFile, "data_type");
     switch (Type) {
     case REG_SZ:
-        fprintf(logFile, "\"REG_SZ\"");
+        fprintf(logFile, "REG_SZ");
         break;
     case REG_EXPAND_SZ:
-        fprintf(logFile, "\"REG_EXPAND_SZ\"");
+        fprintf(logFile, "REG_EXPAND_SZ");
         break;
     case REG_MULTI_SZ:
-        fprintf(logFile, "\"REG_MULTI_SZ\"");
+        fprintf(logFile, "REG_MULTI_SZ");
         break;
     case REG_BINARY:
-        fprintf(logFile, "\"REG_BINARY\"");
+        fprintf(logFile, "REG_BINARY");
         break;
     case REG_DWORD:
-        fprintf(logFile, "\"REG_DWORD\"");
+        fprintf(logFile, "REG_DWORD");
         break;
     case REG_QWORD:
-        fprintf(logFile, "\"REG_QWORD\"");
+        fprintf(logFile, "REG_QWORD");
         break;
     }
-    fprintf(logFile, "\n");
+    endtag(logFile, "data_type");
 }
 
 /**
@@ -78,7 +78,7 @@ static inline void LogRegDataType(ULONG Type, FILE* logFile)
  */
 static inline void LogRegData(PWSTR Data, FILE* logFile)
 {
-    fprintf(logFile, "\"data\": \"%ws\",\n", Data);
+    log(logFile, "data", Data);
 }
 
 /**

@@ -10,8 +10,13 @@
  */
 static inline void LogTime(TIME_FIELDS TimeFields, FILE* logFile)
 {
-    fprintf(logFile, "\"date\": \"%d/%d/%d\",\n", TimeFields.Day, TimeFields.Month, TimeFields.Year);
-    fprintf(logFile, "\"time\": \"%d:%d:%d:%d\",\n", TimeFields.Hour, TimeFields.Minute, TimeFields.Second,TimeFields.Milliseconds);
+    tag(logFile, "date");
+    fprintf(logFile, "%d/%d/%d", TimeFields.Day, TimeFields.Month, TimeFields.Year);
+    endtag(logFile, "date");
+
+    tag(logFile, "time");
+    fprintf(logFile, "%d:%d:%d:%d", TimeFields.Hour, TimeFields.Minute, TimeFields.Second,TimeFields.Milliseconds);
+    endtag(logFile, "time");
 }
 
 /**
@@ -23,25 +28,25 @@ static inline void LogTime(TIME_FIELDS TimeFields, FILE* logFile)
  */
 static inline void LogInfoType(INFO_TYPE InfoType, FILE* logFile)
 {
-    fprintf(logFile, "\"info type\": ");
+    tag(logFile, "info_type");
     switch (InfoType) {
     case INFO_FS:
-        fprintf(logFile, "\"INFO_FS\"");
+        fprintf(logFile, "INFO_FS");
         break;
     case INFO_PROC:
-        fprintf(logFile, "\"INFO_PROC\"");
+        fprintf(logFile, "INFO_PROC");
         break;
     case INFO_LOAD:
-        fprintf(logFile, "\"INFO_LOAD\"");
+        fprintf(logFile, "INFO_LOAD");
         break;
     case INFO_REG:
-        fprintf(logFile, "\"INFO_REG\"");
+        fprintf(logFile, "INFO_REG");
         break;
     default:
-        fprintf(logFile, "\"INVALID INFO TYPE\"");
+        fprintf(logFile, "INVALID INFO TYPE");
         break;
     }
-    fprintf(logFile, ",\n");
+    endtag(logFile, "info_type");
 }
 
 /**
@@ -70,7 +75,7 @@ static inline void LogBaseInfo(INFO Info, FILE* logFile)
  */
 void LogInfo(INFO Info, FILE* logFile) {
     printf("entrou no log info\n");
-    fprintf(logFile, "{\n");
+    tag(logFile, "log");
     LogBaseInfo(Info, logFile);
 
     switch (Info.InfoType) {
@@ -91,9 +96,7 @@ void LogInfo(INFO Info, FILE* logFile) {
         printf("Invalid Type code given\n");
         break;
     }
-    fprintf(logFile, "}");
-
-    fprintf(logFile, ",\n");
+    endtag(logFile, "log");
 
     fflush(logFile); // Flush the buffer after each write
 }

@@ -10,11 +10,11 @@
  */
 void LogLoadImage(LOAD_IMAGE_INFO LoadImageInfo, FILE* logFile)
 {
-    fprintf(logFile, "\"pid\": \"%llu\",\n", (ULONGLONG)LoadImageInfo.PID);
-    fprintf(logFile, "\"full image name\": \"%ws\"", LoadImageInfo.FullImageName);
+    log(logFile, "pid", (ULONGLONG)LoadImageInfo.PID);
+    log(logFile, "full_image_name", (ULONGLONG)LoadImageInfo.FullImageName);
 
     if (LoadImageInfo.ImageInfo.ExtendedInfoPresent) {
-        fprintf(logFile, ",\n\"file name\": \"%ws\"\n", LoadImageInfo.FileName);
+        log(logFile, "file_name", LoadImageInfo.FileName);
     }
     else {
         fprintf(logFile, "\n");

@@ -10,16 +10,16 @@
  */
 static inline void LogIds(IDENTIFIER Ids, FILE* logFile)
 {
-    fprintf(logFile, "\"ppid\": \"%lu\",\n", Ids.PPID);
+    log(logFile, "ppid", Ids.PPID);
 
     if (Ids.isThread) {
-        fprintf(logFile, "\"tid\": \"%lu\",\n", Ids.Id.ID);
+        log(logFile, "tid", Ids.Id.ID);
     }
     else {
-        fprintf(logFile, "\"pid\": \"%lu\",\n", Ids.Id.ID);
+        log(logFile, "pid", Ids.Id.ID);
     }
 
-    fprintf(logFile, "\"operation\": \"%s\",\n", Ids.Active ? "create" : "kill");
+    log(logFile, "operation", Ids.Active ? "create" : "kill");
 }
 
 /**
@@ -34,6 +34,6 @@ void LogProcData(PROC_DATA ProcData, FILE* logFile)
     LogIds(ProcData.Ids, logFile);
     LogTokenInfo(ProcData.TokenInfo, logFile);
 
-    fprintf(logFile, "\"parent name\": \"%ws\",\n", ProcData.ParentName);
-    fprintf(logFile, "\"child name\": \"%ws\"\n", ProcData.ChildName);
+    log(logFile, "parent_name", ProcData.ParentName);
+    log(logFile, "child_name", ProcData.ChildName);
 }

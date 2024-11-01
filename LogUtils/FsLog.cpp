@@ -2,40 +2,36 @@
 #include "../LogUtils.h"
 
 static inline void LogMjFunc(UCHAR MjFunc, FILE* logFile) {
-    fprintf(logFile, "\"mjFunc\": ");
+    tag(logFile, "mj_func");
     switch (MjFunc) {
     case IRP_MJ_WRITE:
-        fprintf(logFile, "\"IRP_MJ_WRITE\"");
+        fprintf(logFile, "IRP_MJ_WRITE");
         break;
     case IRP_MJ_READ:
-        fprintf(logFile, "\"IRP_MJ_READ\"");
+        fprintf(logFile, "IRP_MJ_READ");
         break;
     case IRP_MJ_CREATE:
-        fprintf(logFile, "\"IRP_MJ_CREATE\"");
+        fprintf(logFile, "IRP_MJ_CREATE");
         break;
     default:
-        fprintf(logFile, "\"NOT IMPLEMENTED\"");
+        fprintf(logFile, "NOT_IMPLEMENTED");
     }
-    fprintf(logFile, ",\n");
+    endtag(logFile, "mj_func");
 }
 
 static inline void LogProcInfo(PROC_INFO ProcInfo, FILE* logFile) {
-    fprintf(logFile, "\"pid\": \"%lu\",\n", ProcInfo.PID);
-    fprintf(logFile, "\"tid\": \"%lu\",\n", ProcInfo.TID);
-    fprintf(logFile, "\"sid\": \"%lu\",\n", ProcInfo.SID);
-    printf("\"pid\": \"%p\",\n", &ProcInfo);
-    printf("\"pid\": \"%p\",\n", &ProcInfo.PID);
-    printf("\"tid\": \"%p\",\n", &ProcInfo.TID);
-    printf("\"sid\": \"%p\",\n", &ProcInfo.SID);
+    log(logFile, "pid", ProcInfo.PID);
+    log(logFile, "tid", ProcInfo.TID);
+    log(logFile, "sid", ProcInfo.SID);
 
     LogTokenInfo(ProcInfo.TokenInfo, logFile);
 
-    fprintf(logFile, "\"image name\": \"%ws\",\n", ProcInfo.ImageName);
+    log(logFile, "image_name", ProcInfo.ImageName);
 }
 
 void LogFileInfo(PFILE_INFO FileInfo, FILE* logFile) {
-    fprintf(logFile, "\"path\": \"%ws\",\n", FileInfo->Path);
-    fprintf(logFile, "\"fileName\": \"%ws\"\n", FileInfo->FinalName);
+    log(logFile, "path", FileInfo->Path);
+    log(logFile, "file_name", FileInfo->FinalName);
 }
 
 void LogFsInfo(FS_INFO FsInfo, FILE* logFile) {
