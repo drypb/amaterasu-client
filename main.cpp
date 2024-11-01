@@ -29,10 +29,10 @@ int main(int argc, char** argv) {
     CHAR um_msg[] = "Alo do modo de usuario\n";
 
 
-    fopen_s(&RegLog, "reg.json", "w");
-    fopen_s(&FSLog, "fs.json", "w");
-    fopen_s(&LoadLog, "load.json", "w");
-    fopen_s(&ProcLog, "proc.json", "w");
+    fopen_s(&RegLog, "reg.xml", "w");
+    fopen_s(&FSLog, "fs.xml", "w");
+    fopen_s(&LoadLog, "load.xml", "w");
+    fopen_s(&ProcLog, "proc.xml", "w");
 
     logFile = NULL;
 
